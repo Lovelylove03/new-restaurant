@@ -46,7 +46,7 @@ def load_data():
     return data
 
 def main():
-    set_background_image('https://cdn.pixabay.com/photo/2018/06/14/13/35/restaurant-3489374_1280.jpg')
+    set_background_image('1000_F_292203735_CSsyqyS6A4Z9Czd4Msf7qZEhoxjpzZl1.jpg')
     
     st.title("Gourmet Restaurant Recommendation System")
 
