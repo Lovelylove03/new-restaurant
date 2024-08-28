@@ -32,22 +32,23 @@ def fetch_restaurant_data(term, location, price_range, sort_by='rating', limit=5
         'sort_by': sort_by,
         'limit': limit
     }
-    response = requests.get(YELP_API_URL, headers=headers, params=params)
-    if response.status_code == 200:
+    try:
+        response = requests.get(YELP_API_URL, headers=headers, params=params)
+        response.raise_for_status()
         return response.json()
-    else:
-        st.error(f"Error fetching data: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error fetching data: {e}")
         return {}
 
-@st.cache
+@st.cache_data
 def load_data():
     file_path = 'https://raw.githubusercontent.com/Lovelylove03/new-restaurant/main/df_mich.csv'
     data = pd.read_csv(file_path)
     return data
 
 def main():
-    set_background_image('1000_F_292203735_CSsyqyS6A4Z9Czd4Msf7qZEhoxjpzZl1.jpg')
-    
+    set_background('https://cdn.pixabay.com/photo/2018/06/14/13/35/restaurant-3489374_1280.jpg')
+
     st.title("Gourmet Restaurant Recommendation System")
 
     data = load_data()
