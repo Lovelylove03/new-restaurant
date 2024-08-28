@@ -49,7 +49,7 @@ def load_data():
 def main():
     set_background('https://cdn.pixabay.com/photo/2018/06/14/13/35/restaurant-3489374_1280.jpg')
 
-    st.title("Gourmet Restaurant Recommendation System")
+    st.title("Gastronomic getaway")
 
     data = load_data()
 
@@ -62,7 +62,7 @@ def main():
     price_options = {
         '€€€€': '1,2,3,4', '€€': '2', '€€€': '3', '$$': '2', '$$$$': '4'
     }
-    selected_price = st.sidebar.selectbox("Choose Price Range", list(price_options.keys()))
+    selected_price = st.sidebar.selectbox("Choose currency", list(price_options.keys()))
     yelp_price = price_options.get(selected_price, '1,2,3,4')
 
     if st.sidebar.button("Get Recommendations"):
