@@ -3,16 +3,18 @@ import pandas as pd
 import requests
 
 # Replace with your Yelp API key
-YELP_API_KEY = 'YOUR_YELP_API_KEY'
+YELP_API_KEY = 'QqpMmw2tuGPpmPbikkghpkgZFvxfdetl3NPhp6THcPA8NcuRRDBmD8sY-QAqxdjD-Fe4KAOwvhkVp7xFmG2jbFiND-amRCkloLeHOn9ncLlHQdNHBKx10xd2AiPPZnYx'
 YELP_API_URL = 'https://api.yelp.com/v3/businesses/search'
 
-def set_background_image(image_url):
+def set_background(image_url=None, color=None):
     st.markdown(
         f"""
         <style>
         .stApp {{
-            background-image: url("{image_url}");
+            {'background-image: url("' + image_url + '");' if image_url else ''}
+            {'background-color: ' + color + ';' if color else ''}
             background-size: cover;
+            background-position: center;
         }}
         </style>
         """,
@@ -39,7 +41,7 @@ def fetch_restaurant_data(term, location, price_range, sort_by='rating', limit=5
 
 @st.cache
 def load_data():
-    file_path = 'https://raw.githubusercontent.com/Lovelylove03/Restaurant/main/df_mich.csv'
+    file_path = 'https://raw.githubusercontent.com/Lovelylove03/new-restaurant/main/df_mich.csv'
     data = pd.read_csv(file_path)
     return data
 
