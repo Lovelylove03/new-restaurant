@@ -24,16 +24,17 @@ def fetch_restaurant_data(term, location, price_range, sort_by='rating', limit=5
     headers = {
         'Authorization': f'Bearer {YELP_API_KEY}',
     }
+    # Ensure parameters are properly formatted
     params = {
         'term': term,
         'location': location,
-        'price': price_range,
+        'price': ','.join(price_range) if isinstance(price_range, list) else price_range,  # Correct format
         'sort_by': sort_by,
         'limit': limit
     }
     try:
         response = requests.get(YELP_API_URL, headers=headers, params=params)
-        response.raise_for_status()
+        response.raise_for_status()  # This will raise an error for 4xx/5xx responses
         return response.json()
     except requests.exceptions.RequestException as e:
         st.error(f"Error fetching data: {e}")
