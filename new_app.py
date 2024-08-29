@@ -73,6 +73,8 @@ def main():
 
     if st.sidebar.button("Get Recommendations"):
         data = fetch_restaurant_data(term=cuisine_preference, location=f"{town}, {country}", price_range=yelp_price, limit=5)
+        # Filter results by selected award (Check business categories and awards)
+            filtered_businesses = [business for business in businesses if any(category['title'] == selected_award for category in business.get('categories', []))]
         if 'businesses' in data:
             businesses = data['businesses']
             for business in businesses:
