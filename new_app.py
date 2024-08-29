@@ -78,7 +78,7 @@ def main():
                 st.write(f"Phone: {business.get('display_phone', 'N/A')}")
                 if business.get('image_url'):
                     st.image(business['image_url'])
-                st.write(f"Price: {business.get('price', 'N/A')}")
+                #st.write(f"Price: {business.get('price', 'N/A')}")
                 st.markdown(f"[Visit Yelp Page]({business.get('url', 'N/A')})", unsafe_allow_html=True)
                 st.write("\n")
         else:
