@@ -80,6 +80,8 @@ def main():
             filtered_businesses = [business for business in businesses if selected_award in [category['title'] for category in business.get('categories', [])]]
             
             if filtered_businesses:
+                # Display businesses matching the selected award
+                st.write(f"Showing results for the award: {selected_award}")
                 for business in filtered_businesses:
                     st.subheader(business['name'])
                     st.write(f"Rating: {business['rating']}")
@@ -90,7 +92,17 @@ def main():
                     st.markdown(f"[Visit Yelp Page]({business.get('url', 'N/A')})", unsafe_allow_html=True)
                     st.write("\n")
             else:
-                st.write("No results found with the selected award.")
+                # If no businesses match the selected award, display all available results
+                st.write(f"No results found for the selected award: {selected_award}. Showing all available recommendations.")
+                for business in businesses:
+                    st.subheader(business['name'])
+                    st.write(f"Rating: {business['rating']}")
+                    st.write(f"Address: {', '.join(business['location']['display_address'])}")
+                    st.write(f"Phone: {business.get('display_phone', 'N/A')}")
+                    if business.get('image_url'):
+                        st.image(business['image_url'])
+                    st.markdown(f"[Visit Yelp Page]({business.get('url', 'N/A')})", unsafe_allow_html=True)
+                    st.write("\n")
         else:
             st.write("No results found.")
     
