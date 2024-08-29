@@ -6,12 +6,11 @@ import requests
 YELP_API_KEY = 'QqpMmw2tuGPpmPbikkghpkgZFvxfdetl3NPhp6THcPA8NcuRRDBmD8sY-QAqxdjD-Fe4KAOwvhkVp7xFmG2jbFiND-amRCkloLeHOn9ncLlHQdNHBKx10xd2AiPPZnYx'
 YELP_API_URL = 'https://api.yelp.com/v3/businesses/search'
 
-def set_background(image_url=None, color=None):
+def set_background(color=None):
     st.markdown(
         f"""
         <style>
         .stApp {{
-            {'background-image: url("' + image_url + '");' if image_url else ''}
             {'background-color: ' + color + ';' if color else ''}
             background-size: cover;
             background-position: center;
@@ -47,9 +46,10 @@ def load_data():
     return data
 
 def main():
-    set_background('https://cdn.pixabay.com/photo/2018/06/14/13/35/restaurant-3489374_1280.jpg')
+    # Set green palette background
+    set_background(color="#e0f7e9")  # Light green background color
 
-    st.title("Gastronomic getaway")
+    st.title("Gastronomic Getaway")
 
     data = load_data()
 
@@ -58,35 +58,39 @@ def main():
     filtered_towns = data[data['Country'] == country]['Town'].unique()
     town = st.sidebar.selectbox("Choose Town", sorted(filtered_towns))
     cuisine_preference = st.sidebar.selectbox("Choose Cuisine Type", data['Cuisine'].unique())
+    
     # Award Selection (Unique Awards)
     unique_awards = data['Award'].dropna().unique()
     selected_award = st.sidebar.selectbox("Choose Award", sorted(unique_awards))
 
-
     price_options = {
-        '$$$$':'4' , '€€€€':'4', '¥¥¥':'3', '¥¥¥¥':'4', '$$$':'3', '££££':'4', '$$':'2', '€€€':'3', '₩₩₩₩':'4',
-       '฿฿฿฿':'4', '¥¥':'2', '₺₺₺₺':'4', '₫₫₫₫':'4', '₫₫':'2', '$':'1', '€€':'2', '₩₩':'2', '₩₩₩':'3', '£££':'3',
-       '££':'2', '฿฿฿':'3', '฿฿':'2', '₫':'1', '€':'1', '¥':'1', '₩':'1', '£':'1', '฿':'1'
+        '$$$$': '4', '€€€€': '4', '¥¥¥': '3', '¥¥¥¥': '4', '$$$': '3', '££££': '4', '$$': '2', '€€€': '3', '₩₩₩₩': '4',
+        '฿฿฿฿': '4', '¥¥': '2', '₺₺₺₺': '4', '₫₫₫₫': '4', '₫₫': '2', '$': '1', '€€': '2', '₩₩': '2', '₩₩₩': '3', '£££': '3',
+        '££': '2', '฿฿฿': '3', '฿฿': '2', '₫': '1', '€': '1', '¥': '1', '₩': '1', '£': '1', '฿': '1'
     }
     selected_price = st.sidebar.selectbox("Choose Rates", list(price_options.keys()))
     yelp_price = price_options.get(selected_price, '1,2,3,4')
 
     if st.sidebar.button("Get Recommendations"):
         data = fetch_restaurant_data(term=cuisine_preference, location=f"{town}, {country}", price_range=yelp_price, limit=5)
-        # Filter results by selected award (Check business categories and awards)
-        filtered_businesses = [business for business in businesses if any(category['title'] == selected_award for category in business.get('categories', []))]
+        
         if 'businesses' in data:
             businesses = data['businesses']
-            for business in businesses:
-                st.subheader(business['name'])
-                st.write(f"Rating: {business['rating']}")
-                st.write(f"Address: {', '.join(business['location']['display_address'])}")
-                st.write(f"Phone: {business.get('display_phone', 'N/A')}")
-                if business.get('image_url'):
-                    st.image(business['image_url'])
-                #st.write(f"Price: {business.get('price', 'N/A')}")
-                st.markdown(f"[Visit Yelp Page]({business.get('url', 'N/A')})", unsafe_allow_html=True)
-                st.write("\n")
+            # Filter results by selected award (Check business categories and awards)
+            filtered_businesses = [business for business in businesses if selected_award in [category['title'] for category in business.get('categories', [])]]
+            
+            if filtered_businesses:
+                for business in filtered_businesses:
+                    st.subheader(business['name'])
+                    st.write(f"Rating: {business['rating']}")
+                    st.write(f"Address: {', '.join(business['location']['display_address'])}")
+                    st.write(f"Phone: {business.get('display_phone', 'N/A')}")
+                    if business.get('image_url'):
+                        st.image(business['image_url'])
+                    st.markdown(f"[Visit Yelp Page]({business.get('url', 'N/A')})", unsafe_allow_html=True)
+                    st.write("\n")
+            else:
+                st.write("No results found with the selected award.")
         else:
             st.write("No results found.")
     
