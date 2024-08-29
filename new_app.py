@@ -69,12 +69,9 @@ def main():
     unique_awards = ['No Award'] + sorted(data['Award'].dropna().unique())
     selected_award = st.sidebar.selectbox("Choose Award", unique_awards)
 
-    price_options = {
-        '$$$$': '4', '€€€€': '4', '¥¥¥': '3', '¥¥¥¥': '4', '$$$': '3', '££££': '4', '$$': '2', '€€€': '3', '₩₩₩₩': '4',
-        '฿฿฿฿': '4', '¥¥': '2', '₺₺₺₺': '4', '₫₫₫₫': '4', '₫₫': '2', '$': '1', '€€': '2', '₩₩': '2', '₩₩₩': '3', '£££': '3',
-        '££': '2', '฿฿฿': '3', '฿฿': '2', '₫': '1', '€': '1', '¥': '1', '₩': '1', '£': '1', '฿': '1'
-    }
-    selected_price = st.sidebar.selectbox("Choose Rates", list(price_options.keys()))
+    # Using numerical rates instead of symbols
+    price_options = {1: '1', 2: '2', 3: '3', 4: '4'}
+    selected_price = st.sidebar.selectbox("Choose Rates (1=Low, 4=High)", list(price_options.keys()))
     yelp_price = price_options.get(selected_price, '1,2,3,4')
 
     if st.sidebar.button("Get Recommendations"):
@@ -96,6 +93,11 @@ def main():
             else:
                 filtered_businesses = businesses
             
+            # Show available recommendations if selected criteria is not available
+            if not filtered_businesses:
+                st.write("No results found for the selected criteria. Showing all available recommendations.")
+                filtered_businesses = businesses  # Show all available businesses
+            
             # Display results
             if filtered_businesses:
                 st.write(f"Showing results for {selected_award if selected_award != 'No Award' else 'all available awards'} in {location}.")
@@ -109,7 +111,7 @@ def main():
                     st.markdown(f"[Visit Yelp Page]({business.get('url', 'N/A')})", unsafe_allow_html=True)
                     st.write("\n")
             else:
-                st.write("No results found for the selected criteria.")
+                st.write("No results found.")
         else:
             st.write("No results found.")
     
