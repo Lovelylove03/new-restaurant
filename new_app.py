@@ -60,7 +60,9 @@ def main():
     cuisine_preference = st.sidebar.selectbox("Choose Cuisine Type", data['Cuisine'].unique())
 
     price_options = {
-        '€€€€': '1,2,3,4', '€€': '2', '€€€': '3', '$$': '2', '$$$$': '4'
+        '$$$$':'4' , '€€€€':'4', '¥¥¥':'3', '¥¥¥¥':'4', '$$$':'3', '££££':'4', '$$':'2', '€€€':'3', '₩₩₩₩':'4',
+       '฿฿฿฿':'4', '¥¥':'2', '₺₺₺₺':'4', '₫₫₫₫':'4', '₫₫':'2', '$':'1', '€€':'2', '₩₩':'2', '₩₩₩':'3', '£££':'3',
+       '££':'2', '฿฿฿':'3', '฿฿':'2', '₫':'1', '€':'1', '¥':'1', '₩':'1', '£':'1', '฿':'1'
     }
     selected_price = st.sidebar.selectbox("Choose currency", list(price_options.keys()))
     yelp_price = price_options.get(selected_price, '1,2,3,4')
