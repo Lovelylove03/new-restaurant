@@ -58,13 +58,17 @@ def main():
     filtered_towns = data[data['Country'] == country]['Town'].unique()
     town = st.sidebar.selectbox("Choose Town", sorted(filtered_towns))
     cuisine_preference = st.sidebar.selectbox("Choose Cuisine Type", data['Cuisine'].unique())
+    # Award Selection (Unique Awards)
+    unique_awards = data['Award'].dropna().unique()
+    selected_award = st.sidebar.selectbox("Choose Award", sorted(unique_awards))
+
 
     price_options = {
         '$$$$':'4' , '€€€€':'4', '¥¥¥':'3', '¥¥¥¥':'4', '$$$':'3', '££££':'4', '$$':'2', '€€€':'3', '₩₩₩₩':'4',
        '฿฿฿฿':'4', '¥¥':'2', '₺₺₺₺':'4', '₫₫₫₫':'4', '₫₫':'2', '$':'1', '€€':'2', '₩₩':'2', '₩₩₩':'3', '£££':'3',
        '££':'2', '฿฿฿':'3', '฿฿':'2', '₫':'1', '€':'1', '¥':'1', '₩':'1', '£':'1', '฿':'1'
     }
-    selected_price = st.sidebar.selectbox("Choose currency", list(price_options.keys()))
+    selected_price = st.sidebar.selectbox("Choose Rates", list(price_options.keys()))
     yelp_price = price_options.get(selected_price, '1,2,3,4')
 
     if st.sidebar.button("Get Recommendations"):
